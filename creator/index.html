@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>ExamenCert - Creator</title>
+	</head>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+		
+		*, *:after, *:before {
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: "DM Sans", sans-serif;
+			line-height: 1.5;
+			background-color: #f1f3fb;
+			padding: 0 2rem;
+		}
+		
+		img {
+			max-width: 100%;
+			display: block;
+		}
+		
+		
+/*		Font*/
+		h1{
+			margin-bottom: -0.5%;
+		}
+		
+		
+		// iOS Reset 
+		input {
+			appearance: none;
+			border-radius: 0;
+		}
+		
+		.card {
+			margin: 2rem auto;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			max-width: 425px;
+			background-color: #FFF;
+			border-radius: 10px;
+			box-shadow: 0 10px 20px 0 rgba(#999, .25);
+			padding: .75rem;
+		}
+		
+		.card-image {
+			border-radius: 8px;
+			overflow: hidden;
+			padding-bottom: 65%;
+			background-image: url("./assets/background.png");
+			background-repeat: no-repeat;
+			background-size: 150%;
+			background-position: 0 5%;
+			position: relative;
+		}
+		
+		.card-heading {
+			position: absolute;
+			left: 10%;
+			top: 15%;
+			right: 10%;
+			font-size: 1.75rem;
+			font-weight: 700;
+			color: #FFF;
+			line-height: 1.222;
+			small {
+				display: block;
+				font-size: .75em;
+				font-weight: 400;
+				margin-top: .25em;
+			}
+		}
+		
+		.card-form {
+			padding: 2rem 1rem 0;
+		}
+		
+/*		Inputs*/
+		
+		.input {
+			display: flex;
+			flex-direction: column-reverse;
+			position: relative;
+			padding-top: 2.7rem;
+			&+.input {
+				margin-top: 1.5rem;
+			}
+		}
+		
+		.input-label {
+			color: #8597a3;
+			position: absolute;
+			top: 1.5rem;
+			transition: .25s ease;
+		}
+		
+		.input-field {
+			border: 0;
+			z-index: 1;
+			background-color: transparent;
+			border-bottom: 2px solid #eee; 
+			font: inherit;
+			font-size: 1.125rem;
+			padding: .25 0;
+			&:focus, &:valid {
+				outline: 0;
+				border-bottom-color: #6658d3;
+				&+.input-label {
+					color: #6658d3;
+					transform: translateY(-1.5rem);
+				}
+			}
+		}
+		
+/*		Buttons*/
+		.action {
+			margin-top: 2rem;
+		}
+		
+		button {
+			font: inherit;
+			font-size: 1.25rem;
+			padding: 1em;
+			width: 100%;
+			font-weight: 500;
+			background-color: #6658d3;
+			border-radius: 6px;
+			color: #FFF;
+			border: 0;
+			&:focus {
+				outline: 0;
+			}
+		}
+		
+		#copy_btn, #reload_btn, #copy_btn_js {
+			width: 40%;
+			font-size: 15px;
+		}
+		
+		.card-info {
+			padding: 1rem 1rem;
+			text-align: center;
+			font-size: .875rem;
+			color: #8597a3;
+			a {
+				display: block;
+				color: #6658d3;
+				text-decoration: none;
+			}
+		}
+		
+		#notification_enteralldata {
+			display: none;
+		}
+		
+		#idcode {
+			font-weight: bold;
+		}
+		
+		#done {
+			display: none;
+			margin-top: 20px;
+		}
+		
+		#error {
+			display: none;
+			margin-top: 20px;
+		}
+		
+	</style>
+	<body onload="id_gen()">
+		<div class="container">
+			
+			<div class="card">
+				<div class="card-image">	
+					<h2 class="card-heading">
+						Fang an
+						<small>erstelle ein verifizierbares Zertifikat</small>
+					</h2>
+				</div>
+				<form class="card-form">
+					<div class="input">
+						<input type="text" class="input-field" id="name" placeholder="Max Mustermann"/>
+						<label class="input-label">Name*</label>
+					</div>
+					<div class="input">
+						<input type="text" class="input-field" id="date" placeholder="DD-MM-YYYY"/>
+						<label class="input-label">Austellungsdatum*</label>
+					</div>
+					<div class="input">
+						<input type="text" class="input-field" id="type" placeholder="Auszeichnung"/>
+						<label class="input-label">Typ des Zertifikates*</label>
+					</div>
+					<div class="input">
+						<input type="text" class="input-field" id="issuedby" placeholder="Musterfirma GmBH"/>
+						<label class="input-label">Ausgestellt von*</label>
+					</div>
+					<div class="input">
+						<input type="text" class="input-field" id="id" placeholder="123 456" readonly="readonly"/>
+						<label class="input-label">ID*</label>
+					</div>
+					
+					<center>
+						<p id="notification_enteralldata">Bitte gebe alle Daten an</p>
+					</center>
+					
+					<div class="action">
+						<button type="button" class="action-button">Erstellen</button>
+					</div>
+					
+				</form>
+				
+				<!--Done Page-->
+				<div id="done">
+					<center>
+						<img src="./assets/accept.png" alt="Accept" width="30%">	
+						<h1>Fertig</h1>
+						<small>Dein ExamenCert Code lautet </small>
+						<small id="idcode">XXXXXX</small> 
+						<small>diesen kannst du nun auf dein Zertifikat zusammen mit der URL examencert.guocn.org. Bitte packe den HTML Code in eine Datei die </small>
+						<small id="idencoded" style="font-weight: bold;">ABCDEFG</small>
+						<small>um Fehler zu vermeiden.</small>
+
+						<div id="copy_div">
+							<button	type="button" id="copy_btn">Copy HTML</button>
+						</div>
+						<div id="copy_div">
+							<button	type="button" id="copy_btn_js">Copy JS</button>
+						</div>
+						<div id="reload_div">
+							<button	type="button" id="reload_btn">Weiter machen</button>
+						</div>
+						<textarea class="result_text" readonly="readonly" style="resize: none;"></textarea>
+						<textarea class="result_text_js" readonly="readonly" style="resize: none;"></textarea>
+						</center>
+				</div>
+
+				<!--Error Page-->
+				<div id="error">
+					<center>
+						<img src="./assets/disagree.png" alt="Accept" width="30%">	
+						<h1>Fehler</h1>
+						<small>Ein Fehler ist aufgetreten, bitte versuche es erneut oder später noch einmal.</small>
+						<div id="reload_div">
+							<button	type="button" id="reload_btn" style="margin-top: 2%;">Erneut versuchen</button>
+						</div>
+						
+					</center>
+				</div>
+				
+				<div class="card-info">
+					<p>Mit dem erstellen eines Zertifikates stimmen sie den <a href="#">Terms and Conditions</a> zu.</p>
+				</div>
+				
+			</div>
+		</div>
+	</body>
+	<script src="./script.js"></script>
+</html>
